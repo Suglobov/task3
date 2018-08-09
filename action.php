@@ -130,7 +130,7 @@ if ($strict !== null) {
 // --
 
 // открываем файл для записи
-$handleFileOutput = fopen($fileOutput, "w");
+$handleFileOutput = fopen($fileOutput, "wb+");
 // проверка на запись в файл
 if (!is_writable($fileOutput)) {
     showErrorAndExit("$fileOutput не доступен для записи или несуществует" . PHP_EOL . getMotivationToHelp());
@@ -176,10 +176,7 @@ if ($handleFileInput && $handleFileOutput) {
                     showErrorAndExit($dataFileOutput['message'], $dataFileOutput['exit']);
                 }
             }
-//            echo 'ftell: ' . ftell($handleFileOutput) . PHP_EOL;
             $fputcsv = fputcsv($handleFileOutput, $dataFileOutput, $delimiter);
-            echo '$fputcsv: ' . $fputcsv . PHP_EOL;
-            echo 'ftell: ' . ftell($handleFileOutput) . PHP_EOL;
             if ($fputcsv === false) {
                 showErrorAndExit("fputcsv отработал с ошибкой");
             }
@@ -187,40 +184,12 @@ if ($handleFileInput && $handleFileOutput) {
             // надо проверить какой конец строки записывает fputcsv.
             // Хоть сейчас и не используется \r, все равно проверку сделаю универсальной.
             if (fseek($handleFileOutput, -1, SEEK_CUR) === 0) {
-                echo 'ftell: ' . ftell($handleFileOutput) . PHP_EOL;
                 if (fseek($handleFileOutput, -1, SEEK_CUR) === 0) {
-                    echo 'ftell before fread: ' . ftell($handleFileOutput) . PHP_EOL;
-                    $linePartOut = fread($handleFileOutput, 2);
-                    if ($linePartOut === false) {
-                        echo 'fread er' . PHP_EOL;
-                    } else {
-                        echo 'fread ok' . PHP_EOL;
-                    }
-                    echo 'ftell after fread: ' . ftell($handleFileOutput) . PHP_EOL;
-                    echo '$linePartOut: ' . $linePartOut . PHP_EOL;
-                    $eolOut = findEOL($linePartOut);
-                    echo 'findEOL($linePartOut:' . findEOL($linePartOut, 1) . PHP_EOL;
-                    echo '$infoFileInput[\'eol\']:' . findEOL($infoFileInput['eol'], 1) . PHP_EOL;
-                    if ($eolOut != $infoFileInput['eol']) {
-                        $eolOutLength = strlen($eolOut);
-                        echo '$eolOutLength: ' . $eolOutLength . PHP_EOL;
-                        if (fseek($handleFileOutput, -$eolOutLength, SEEK_CUR) === 0) {
-                            fwrite($handleFileOutput, $infoFileInput['eol']);
-                        }
-                    }
+                    readEOLAndWriteNew($handleFileOutput, 2, $infoFileInput);
                 } else {
-                    echo 'else ftell: ' . ftell($handleFileOutput) . PHP_EOL;
-                    $linePartOut = fread($handleFileOutput, 1);
-                    $eolOut = findEOL($linePartOut);
-                    if ($eolOut != $infoFileInput['eol']) {
-                        $eolOutLength = strlen($eolOut);
-                        if (fseek($handleFileOutput, -$eolOutLength, SEEK_CUR) === 0) {
-                            fwrite($handleFileOutput, $infoFileInput['eol']);
-                        }
-                    }
+                    readEOLAndWriteNew($handleFileOutput, 1, $infoFileInput);
                 }
             }
-            echo PHP_EOL;
         }
     } finally {
         fclose($handleFileInput);
@@ -232,6 +201,18 @@ if ($handleFileInput && $handleFileOutput) {
 showMessageAndExit("Успешно выполнено");
 
 // ********** ********** Функции ********** ********** //
+function readEOLAndWriteNew($handleFileOutput, $readByte, $infoFileInput)
+{
+    $linePartOut = fread($handleFileOutput, $readByte);
+    $eolOut = findEOL($linePartOut);
+    if ($eolOut != $infoFileInput['eol']) {
+        $eolOutLength = strlen($eolOut);
+        if (fseek($handleFileOutput, -$eolOutLength, SEEK_CUR) === 0) {
+            fwrite($handleFileOutput, $infoFileInput['eol']);
+        }
+    }
+}
+
 function processingInputRow($dataFileInput, $contentFileConfig, $faker, $row, $infoFileInput)
 {
     $dataFileOutput = [];
