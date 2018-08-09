@@ -1,18 +1,15 @@
 <?php
 /*
--i tests/files/good1Input.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
--i tests/files/good1Input.csv -c tests/files/good1Input.csv -o tests/files/tmpOutput.csv
--i tests/files/encodW1251.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
--i tests/files/tmpOutput.csv -c tests/files/good1Conf.php -o tests/files/tmp2Output.csv
--i tests/files/eolInputCRNL.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
+true  -i tests/files/good1Input.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
+false -i tests/files/good1Input.csv -c tests/files/good1Input.csv -o tests/files/tmpOutput.csv
+true  -i tests/files/encodW1251.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
+false -i tests/files/tmpOutput.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
+true  -i tests/files/tmpOutput.csv -c tests/files/good1Conf.php -o tests/files/tmp2Output.csv
+true  -i tests/files/eolInputCRNL.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
  */
 
-$shortopts = "i:c:o:d::h";
-$longopts = ["input:", "config:", "output:", "delimiter::", "skip-first", "strict", "help",];
-
-//$possibleParams = [
-//    "i", "c", "o", "d", "h",
-//    "input", "config", "output", "delimiter", "skip-first", "strict", "help"];
+$shortopts = "i:c:o:d:h";
+$longopts = ["input:", "config:", "output:", "delimiter:", "skip-first", "strict", "help",];
 
 $options = getopt($shortopts, $longopts, $optind);
 
@@ -20,18 +17,28 @@ if (!$options) {
     showErrorAndExit("`getopt` сработал с ошибкой");
 }
 
+// вывод введеных параметров
+echo "Введенные параметры: " . implode(", ", array_keys($options)) . PHP_EOL;
+// --
+
 // проверка дублирование входных параметров
-if (isset($options["i"]) && isset($options["input"])) {
-    showErrorAndExit("параметр input вызывается дваждый в короткой и длинной форме"
-        . PHP_EOL . getMotivationToHelp());
-}
-if (isset($options["с"]) && isset($options["config"])) {
-    showErrorAndExit("параметр config вызывается дваждый в короткой и длинной форме"
-        . PHP_EOL . getMotivationToHelp());
-}
-if (isset($options["o"]) && isset($options["output"])) {
-    showErrorAndExit("параметр output вызывается дваждый в короткой и длинной форме"
-        . PHP_EOL . getMotivationToHelp());
+$equalParams = [
+    ['i', 'input'],
+    ['c', 'config'],
+    ['o', 'output'],
+    ['d', 'delimiter'],
+    ['h', 'help'],
+];
+foreach ($equalParams as $k => $v) {
+    $tmpArr = array_filter($v, function ($a) use ($options) {
+        return isset($options[$a]);
+    });
+    if (count($tmpArr) > 1) {
+        showErrorAndExit("вызываны дублирующие параметры: "
+            . implode(', ', $v)
+            . ". Выберете 1 из вариантов вызова"
+            . PHP_EOL . getMotivationToHelp());
+    }
 }
 // --
 
@@ -46,27 +53,52 @@ $fileOutput = (isset($options["o"]) ? $options["o"] : null);
 $fileOutput = (isset($options["output"]) ? $options["output"] : $fileOutput);
 //echo print_r($fileOutput, 1) . PHP_EOL;
 
-$help = isset($options["h"]) ? $options["h"] : null;
-$help = isset($options["help"]) ? $options["help"] : $help;
+$help = isset($options["h"]) ? true : null;
+$help = isset($options["help"]) ? true : $help;
 
 $delimiter = isset($options["d"]) ? $options["d"] : ",";
 $delimiter = isset($options["delimiter"]) ? $options["delimiter"] : $delimiter;
 //echo '$delimiter: ' . $delimiter . PHP_EOL;
+//echo '$delimiter gettype: ' . gettype($delimiter) . PHP_EOL;
 
-$strict = isset($options["strict"]) ? $options["strict"] : null;
-$skipFirst = isset($options["skip-first"]) ? $options["skip-first"] : null;
+$strict = isset($options["strict"]) ? true : null;
+$skipFirst = isset($options["skip-first"]) ? true : null;
 // --
 
-// проверка что параметры не являются массивами
+// проверка типов всех параметров
 foreach ($options as $k => $v) {
     if (gettype($v) != "string" && gettype($v) != "boolean") {
         showErrorAndExit("$k недопустимый тип входного параметра" . PHP_EOL . getMotivationToHelp());
     }
 }
+// проверка типа параметра delimiter
+if (!(gettype($delimiter) == "string" && strlen($delimiter) == 1)) {
+    showErrorAndExit(
+        "delimiter должен быть строкой из 1 символа ("
+        . gettype($delimiter)
+        . ")"
+        . PHP_EOL . getMotivationToHelp()
+    );
+}
 // --
 
-// вывод введеных параметров
-echo "Введенные параметры: " . implode(", ", array_keys($options)) . PHP_EOL;
+// проверка на повторяемость параметров
+$requiredParams = [$fileInput, $fileConfig, $fileOutput];
+$requiredParamsName = ['input', 'config', 'output'];
+for ($i = 0; $i < count($requiredParams) - 1; $i++) {
+    for ($j = $i + 1; $j < count($requiredParams); $j++) {
+        if (isset($requiredParams[$i])
+            && isset($requiredParams[$j])
+            && ($requiredParams[$i] == $requiredParams[$j])
+        ) {
+            showErrorAndExit(
+                $requiredParamsName[$i] . " и " . $requiredParamsName[$j]
+                . " параметры дублируют свои значения"
+                . PHP_EOL . getMotivationToHelp()
+            );
+        }
+    }
+}
 // --
 
 // вывод подсказок
@@ -78,22 +110,6 @@ if (isset($help)) {
 // проверка на существование обязательных параметров
 if (!(isset($fileInput) && isset($fileConfig) && isset($fileOutput))) {
     showErrorAndExit("Обязательные параметры не введены" . PHP_EOL . getHelp());
-}
-// --
-
-// проверка на повторяемость параметров
-$requiredParams = [$fileInput, $fileConfig, $fileOutput];
-$requiredParamsName = ['input', 'config', 'output'];
-for ($i = 0; $i < count($requiredParams) - 1; $i++) {
-    for ($j = $i + 1; $j < count($requiredParams); $j++) {
-        if ($requiredParams[$i] == $requiredParams[$j]) {
-            showErrorAndExit(
-                $requiredParamsName[$i] . " и " . $requiredParamsName[$j]
-                . " параметры дублируют свои значения"
-                . PHP_EOL . getMotivationToHelp()
-            );
-        }
-    }
 }
 // --
 

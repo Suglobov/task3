@@ -4,7 +4,7 @@ return [
     1 => 'streetName', // faker
     2 => null, // set value to null
     3 => function ($value, $rowData, $rowIndex, $faker) {
-        return 'фыва йцук';
+        return 'фыва йцукс';
     },
     4 => function ($value, $rowData, $rowIndex, $faker) {
         if ($value == 23) {

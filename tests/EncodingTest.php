@@ -1,14 +1,17 @@
 <?php
 
+namespace Test;
+
 use PHPUnit\Framework\TestCase;
 
-class InputParametersTest extends TestCase
+class EncodingTest extends TestCase
 {
     private $filePath;
 
     protected function setUp()
     {
-        $this->filePath = __DIR__ . '/../action.php';
+        include "bootstrap.php";
+        $this->filePath = $scriptPath;
     }
 
     /**
@@ -17,8 +20,8 @@ class InputParametersTest extends TestCase
     public function testEncoding($encod, $fileInput)
     {
         $fp = $this->filePath;
-        $fileConf = "files/good1Conf.php";
-        $fileOunput = "files/tmpOutput.csv";
+        $fileConf = __DIR__ . "/files/good1Conf.php";
+        $fileOunput = __DIR__ . "/files/tmpOutput.csv";
 
         $exec = exec(
             "php " . $fp . " -i $fileInput -c $fileConf -o $fileOunput",
@@ -44,8 +47,8 @@ class InputParametersTest extends TestCase
     public function additionProvider()
     {
         return [
-            ['UTF-8', "files/encodUtf8.csv"],
-            ['Windows-1251', "files/encodW1251.csv"],
+            ['UTF-8', __DIR__ . "/files/encodUtf8.csv"],
+            ['Windows-1251', __DIR__ . "/files/encodW1251.csv"],
         ];
     }
 }
