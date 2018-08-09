@@ -18,7 +18,11 @@ if (!$options) {
 }
 
 // вывод введеных параметров
-echo "Введенные параметры: " . implode(", ", array_keys($options)) . PHP_EOL;
+//echo "Введенные параметры: " . implode(", ", array_keys($options)) . PHP_EOL;
+echo "Введенные параметры: " . PHP_EOL;
+foreach ($options as $k => $v) {
+    echo "\t$k: $v" . PHP_EOL;
+}
 // --
 
 // проверка дублирование входных параметров
@@ -73,13 +77,18 @@ foreach ($options as $k => $v) {
 }
 // проверка типа параметра delimiter
 if (!(gettype($delimiter) == "string" && strlen($delimiter) == 1)) {
-    showErrorAndExit(
-        "delimiter должен быть строкой из 1 символа ("
-        . gettype($delimiter)
-        . ")"
-        . PHP_EOL . getMotivationToHelp()
-    );
+    if ($delimiter == '\t') {
+        $delimiter = "\t";
+    } else {
+        showErrorAndExit(
+            "delimiter должен быть строкой из 1 символа ("
+            . gettype($delimiter)
+            . ")"
+            . PHP_EOL . getMotivationToHelp()
+        );
+    }
 }
+echo '$delimiter:' . $delimiter . "|||". PHP_EOL;
 // --
 
 // проверка на повторяемость параметров

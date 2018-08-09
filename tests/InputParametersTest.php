@@ -33,14 +33,18 @@ class InputParametersTest extends TestCase
     public function additionProvider()
     {
         $fileGoodI = __DIR__ . "/files/good1Input.csv";
+        $fileGoodI2 = __DIR__ . "/files/good2Input.csv";
+        $fileGoodI4 = __DIR__ . "/files/good4Input.csv";
+        $fileBadI = __DIR__ . "/files/bad1Input.csv";
+
         $fileGoodC = __DIR__ . "/files/good1Conf.php";
+        $fileBadC = __DIR__ . "/files/bad1Conf.php";
 
         $fileO = __DIR__ . "/files/tmpOutput.csv";
 
-        $fileGoodI2 = __DIR__ . "/files/good2Input.csv";
 
-        $fileBadI = __DIR__ . "/files/bad1Input.csv";
-        $fileBadC = __DIR__ . "/files/bad1Conf.php";
+
+
 
         return [
             // нет обязательных параметров
@@ -86,6 +90,7 @@ class InputParametersTest extends TestCase
             // правильный делиметр и файл с ним
             [true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d ","']],
             [true, ["-i $fileGoodI2", "-c $fileGoodC", "-o $fileO", '-d ";"']],
+            [true, ["-i $fileGoodI4", "-c $fileGoodC", "-o $fileO", "-d $'\t'"]],
             // делиметр с пустым значением (игнорируется такой параметр)
             [true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d']],
             // пропуст первой строки
