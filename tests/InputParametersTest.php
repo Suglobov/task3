@@ -81,14 +81,14 @@ class InputParametersTest extends TestCase
             [false, ["-i $fileGoodC", "-c $fileGoodI", "-o $fileO"]],
             // стрикт и плохой конфиг
             [false, ["-i $fileGoodI", "-c $fileBadC", "-o $fileO", "--strict"]],
-            // плохие входные данные
+            // плохие входные данные (не все строки имеют одинаковое количество столбцов)
             [false, ["-i $fileBadI", "-c $fileGoodC", "-o $fileO"]],
             // правильный делиметр и файл с ним
             [true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d ","']],
             [true, ["-i $fileGoodI2", "-c $fileGoodC", "-o $fileO", '-d ";"']],
-            // делиметр с пустым значением, игнорируется такой параметр
+            // делиметр с пустым значением (игнорируется такой параметр)
             [true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d']],
-            // пропуст 1 строки
+            // пропуст первой строки
             [true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "--skip-first"]],
             // стрикт с правильным конфигом
             [true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "--strict"]],
