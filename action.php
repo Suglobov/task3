@@ -6,6 +6,7 @@ true  -i tests/files/encodW1251.csv -c tests/files/good1Conf.php -o tests/files/
 false -i tests/files/tmpOutput.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
 true  -i tests/files/tmpOutput.csv -c tests/files/good1Conf.php -o tests/files/tmp2Output.csv
 true  -i tests/files/eolInputCRNL.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv
+true  -i tests/files/good4Input.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv -d $'\t'
  */
 
 $shortopts = "i:c:o:d:h";
