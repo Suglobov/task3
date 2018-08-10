@@ -28,11 +28,11 @@ class InputParametersTest extends TestCase
             $output,
             $return_var
         );
-        if ($testNumber == 35) {
-            echo PHP_EOL;
-            echo implode(" ", $arrayParams) . PHP_EOL;
-            echo print_r($output, 1) . PHP_EOL;
-        }
+//        if ($testNumber == 35) {
+//            echo PHP_EOL;
+//            echo implode(" ", $arrayParams) . PHP_EOL;
+//            echo print_r($output, 1) . PHP_EOL;
+//        }
         $this->assertEquals($expected, $return_var == 0);
     }
 
