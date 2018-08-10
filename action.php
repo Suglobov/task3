@@ -88,7 +88,7 @@ if (!(gettype($delimiter) == "string" && strlen($delimiter) == 1)) {
         );
     }
 }
-echo '$delimiter:' . $delimiter . "|||". PHP_EOL;
+//echo '$delimiter:' . $delimiter . "|||". PHP_EOL;
 // --
 
 // проверка на повторяемость параметров
