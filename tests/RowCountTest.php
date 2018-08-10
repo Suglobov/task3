@@ -36,8 +36,8 @@ class RowCountTest extends TestCase
     public function additionProvider()
     {
         return [
-            [__DIR__ . "/files/good1Input.csv"],
             [__DIR__ . "/files/good3Input.csv"],
+            [__DIR__ . "/files/good1Input.csv"],
         ];
     }
 }

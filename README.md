@@ -67,3 +67,14 @@ Options:
     php action.php --help
     ```
 5. файлы с тестовыми данными лежат в каталоге проекта **./tests/files**
+
+## Варианты вызова
+завершится ли успешно | параметры после **php action.php**  
+--------------------- | ----------------------------------  
+true  | -i tests/files/good1Input.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv  
+false | -i tests/files/good1Input.csv -c tests/files/good1Input.csv -o tests/files/tmpOutput.csv  
+true  | -i tests/files/encodW1251.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv  
+false | -i tests/files/tmpOutput.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv  
+true  | -i tests/files/tmpOutput.csv -c tests/files/good1Conf.php -o tests/files/tmp2Output.csv  
+true  | -i tests/files/eolInputCRNL.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv  
+true  | -i tests/files/good4Input.csv -c tests/files/good1Conf.php -o tests/files/tmpOutput.csv -d $'\t'  
