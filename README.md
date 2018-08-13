@@ -46,6 +46,7 @@ Options:
 ```
 
 ## Установка
+Требуется **php 7**, установленный **composer**
 1. клонируйте репозиторий с гитхаба:
     ```
     git clone https://github.com/Suglobov/task3.git 
