@@ -2,4 +2,4 @@ install:
 	composer install
 
 test:
-	phpunit tests/
+	./vendor/bin/phpunit tests/

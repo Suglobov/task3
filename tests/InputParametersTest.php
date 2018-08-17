@@ -10,7 +10,7 @@ class InputParametersTest extends TestCase
 
     protected function setUp()
     {
-        include "bootstrap.php";
+        include __DIR__ . "/bootstrap.php";
         $this->filePath = $scriptPath;
     }
 
@@ -28,25 +28,21 @@ class InputParametersTest extends TestCase
             $output,
             $return_var
         );
-//        if ($testNumber == 35) {
-//            echo PHP_EOL;
-//            echo implode(" ", $arrayParams) . PHP_EOL;
-//            echo print_r($output, 1) . PHP_EOL;
-//        }
+
         $this->assertEquals($expected, $return_var == 0);
     }
 
     public function additionProvider()
     {
-        $fileGoodI = __DIR__ . "/files/good1Input.csv";
-        $fileGoodI2 = __DIR__ . "/files/good2Input.csv";
-        $fileGoodI4 = __DIR__ . "/files/good4Input.csv";
-        $fileBadI = __DIR__ . "/files/bad1Input.csv";
+        $fileGoodI = __DIR__ . "/testingFiles/good/good1Input.csv";
+        $fileGoodI2 = __DIR__ . "/testingFiles/good/good2Input.csv";
+        $fileGoodI4 = __DIR__ . "/testingFiles/good/good4Input.csv";
+        $fileBadI = __DIR__ . "/testingFiles/bad/bad1Input.csv";
 
-        $fileGoodC = __DIR__ . "/files/good1Conf.php";
-        $fileBadC = __DIR__ . "/files/bad1Conf.php";
+        $fileGoodC = __DIR__ . "/testingFiles/good/good1Conf.php";
+        $fileBadC = __DIR__ . "/testingFiles/bad/bad1Conf.php";
 
-        $fileO = __DIR__ . "/files/tmpOutput.csv";
+        $fileO = __DIR__ . "/testingFiles/tmpOutput.csv";
 
 
         return [
@@ -64,21 +60,21 @@ class InputParametersTest extends TestCase
             [11, false, ["-i fff", "-o sss", "-c eee"]],
             [12, false, ["-i $fileGoodI", "-c $fileGoodC", "--strict"]],
             // входные параметры - массивы
-//            [13, false, ["-i $fileGoodI", "-i $fileGoodI", "-c $fileGoodC", "-o $fileO"]],
-//            [14, false, ["-i $fileGoodI", "-c $fileGoodC", "-c $fileGoodC", "-o $fileO"]],
-//            [15, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "-o $fileO"]],
-//            [16, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "--strict", "--strict"]],
-//            [17, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "--skip-first", "--skip-first"]],
-//            [18, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d ","', '-d ","']],
-//            [19, false, ["-h", "-h"]],
-//            [20, false, ["--help", "--help"]],
+            //            [13, false, ["-i $fileGoodI", "-i $fileGoodI", "-c $fileGoodC", "-o $fileO"]],
+            //            [14, false, ["-i $fileGoodI", "-c $fileGoodC", "-c $fileGoodC", "-o $fileO"]],
+            //            [15, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "-o $fileO"]],
+            //            [16, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "--strict", "--strict"]],
+            //            [17, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", "--skip-first", "--skip-first"]],
+            //            [18, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d ","', '-d ","']],
+            //            [19, false, ["-h", "-h"]],
+            //            [20, false, ["--help", "--help"]],
             // неправильный делиметр
             [21, false, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d "asdf"']],
             // дублирование параметров
-//            [22, false, ["-h", "--help"]],
-//            [23, false, ["-i $fileGoodI", "--input $fileGoodI", "-c $fileGoodC", "-o $fileO"]],
-//            [24, false, ["-i $fileGoodI", "--config $fileGoodC", "-c $fileGoodC", "-o $fileO"]],
-//            [25, false, ["-i $fileGoodI", "--output $fileO", "-c $fileGoodC", "-o $fileO"]],
+            //            [22, false, ["-h", "--help"]],
+            //            [23, false, ["-i $fileGoodI", "--input $fileGoodI", "-c $fileGoodC", "-o $fileO"]],
+            //            [24, false, ["-i $fileGoodI", "--config $fileGoodC", "-c $fileGoodC", "-o $fileO"]],
+            //            [25, false, ["-i $fileGoodI", "--output $fileO", "-c $fileGoodC", "-o $fileO"]],
             // одинаковые значения обязательных параметров
             [26, false, ["-i $fileGoodI", "-c $fileGoodI", "-o $fileO"]],
             [27, false, ["-i $fileGoodI", "-c $fileO", "-o $fileO"]],
@@ -94,7 +90,7 @@ class InputParametersTest extends TestCase
             [33, true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d ","']],
             [34, true, ["-i $fileGoodI2", "-c $fileGoodC", "-o $fileO", '-d ";"']],
             // не получилось запустить этот тест так, чтоб строка $'\t' воспринялась как табуляция в exec
-//            [35, true, ["-i $fileGoodI4", "-c $fileGoodC", "-o $fileO", "-d $'" . '\t' . "'"]],
+            //            [35, true, ["-i $fileGoodI4", "-c $fileGoodC", "-o $fileO", "-d $'" . '\t' . "'"]],
             // делиметр с пустым значением (игнорируется такой параметр)
             [36, true, ["-i $fileGoodI", "-c $fileGoodC", "-o $fileO", '-d']],
             // пропуст первой строки

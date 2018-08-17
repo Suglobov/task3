@@ -10,7 +10,7 @@ class RowCountTest extends TestCase
 
     protected function setUp()
     {
-        include "bootstrap.php";
+        include __DIR__ . "/bootstrap.php";
         $this->filePath = $scriptPath;
     }
 
@@ -20,8 +20,8 @@ class RowCountTest extends TestCase
     public function testRowCount($fileInput)
     {
         $fp = $this->filePath;
-        $fileConf = __DIR__ . "/files/good1Conf.php";
-        $fileOunput = __DIR__ . "/files/tmpOutput.csv";
+        $fileConf = __DIR__ . "/testingFiles/good/good1Conf.php";
+        $fileOunput = __DIR__ . "/testingFiles/tmpOutput.csv";
 
         $exec = exec(
             "php " . $fp . " -i $fileInput -c $fileConf -o $fileOunput"
@@ -36,8 +36,8 @@ class RowCountTest extends TestCase
     public function additionProvider()
     {
         return [
-            [__DIR__ . "/files/good3Input.csv"],
-            [__DIR__ . "/files/good1Input.csv"],
+            [__DIR__ . "/testingFiles/good/good3Input.csv"],
+            [__DIR__ . "/testingFiles/good/good1Input.csv"],
         ];
     }
 }

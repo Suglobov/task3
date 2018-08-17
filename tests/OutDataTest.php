@@ -10,16 +10,16 @@ class OutDataTest extends TestCase
 
     protected function setUp()
     {
-        include "bootstrap.php";
+        include __DIR__ . "/bootstrap.php";
         $this->filePath = $scriptPath;
     }
 
     public function testOutData()
     {
         $fp = $this->filePath;
-        $fileInput = __DIR__ . "/files/good1Input.csv";
-        $fileConf = __DIR__ . "/files/good1Conf.php";
-        $fileOunput = __DIR__ . "/files/tmpOutput.csv";
+        $fileInput = __DIR__ . "/testingFiles/good/good1Input.csv";
+        $fileConf = __DIR__ . "/testingFiles/good/good1Conf.php";
+        $fileOunput = __DIR__ . "/testingFiles/tmpOutput.csv";
 
         $exec = exec(
             "php " . $fp . " -i $fileInput -c $fileConf -o $fileOunput",
@@ -39,9 +39,6 @@ class OutDataTest extends TestCase
                     && ($dataOutput = fgetcsv($handleOutput, 0, ',')) !== false) {
                     switch ($row) {
                         case 0:
-//                            echo PHP_EOL;
-//                            echo print_r($dataOutput, 1) . PHP_EOL;
-//                            echo print_r(gettype($dataOutput[2]), 1) . PHP_EOL;
                             $this->assertEquals(is_string($dataInput[0]), true);
                             $this->assertEquals(is_string($dataInput[1]), true);
                             $this->assertEquals(is_string($dataInput[2]), true);

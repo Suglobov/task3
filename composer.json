@@ -1,7 +1,6 @@
 {
     "require": {
         "fzaninotto/faker": "^1.8",
-        "docopt/docopt": "^1.0",
         "mikey179/vfsStream": "^1.6"
     },
     "require-dev": {

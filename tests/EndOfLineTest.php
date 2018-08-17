@@ -10,7 +10,7 @@ class EndOfLineTest extends TestCase
 
     protected function setUp()
     {
-        include "bootstrap.php";
+        include __DIR__ . "/bootstrap.php";
         $this->filePath = $scriptPath;
     }
 
@@ -20,8 +20,8 @@ class EndOfLineTest extends TestCase
     public function testEndOfLine($fileInput)
     {
         $fp = $this->filePath;
-        $fileConf = __DIR__ . "/files/good1Conf.php";
-        $fileOunput = __DIR__ . "/files/tmpOutput.csv";
+        $fileConf = __DIR__ . "/testingFiles/good/good1Conf.php";
+        $fileOunput = __DIR__ . "/testingFiles/tmpOutput.csv";
 
         $exec = exec(
             "php " . $fp . " -i $fileInput -c $fileConf -o $fileOunput"
@@ -39,9 +39,9 @@ class EndOfLineTest extends TestCase
     public function additionProvider()
     {
         return [
-            [__DIR__ . "/files/eolInputCRNL.csv"],
-//            [__DIR__."/files/eolInputCR.csv"],
-            [__DIR__ . "/files/eolInputNL.csv"],
+            [__DIR__ . "/testingFiles/eol/eolInputCRNL.csv"],
+            //            [__DIR__."/testingFiles/eol/eolInputCR.csv"],
+            [__DIR__ . "/testingFiles/eol/eolInputNL.csv"],
         ];
     }
 
