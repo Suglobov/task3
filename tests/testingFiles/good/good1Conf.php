@@ -16,4 +16,3 @@ return [
         return $faker->randomDigit;
     },
 ];
-
